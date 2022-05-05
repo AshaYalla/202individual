@@ -1,5 +1,5 @@
 package Utils;
 
-public interface ReadDataFactory {
+public interface ReadData {
     public void readData(String path);
 }

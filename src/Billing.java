@@ -1,31 +1,45 @@
 import Utils.ReadCard;
-import Utils.Shopping;
-import Utils.ReadFile;
-import Utils.ReadDataFactory;
+import Utils.OrderGeneration;
+import Utils.ReadInventory;
+import Utils.ReadData;
+import Utils.ProcessFactory;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Billing {
 
     public static void main(String[] args) {
 
-    System.out.println("Main executing");
-        processRead(args);
+        processInput(args);
     }
-    private static void processRead(String[] args) {
-        {
-            ReadDataFactory fileReader = new ReadFile();
-            ReadDataFactory cardReader = new ReadCard();
+    private static void processInput(String[] args) {
 
-            cardReader.readData(args[0]);
-            fileReader.readData(args[1]);
-            placeOrder(args[2]);
+        {
+            Path currentRelativePath = Paths.get("");
+            String s = currentRelativePath.toAbsolutePath().toString();
+            String strNew = s.substring(0, s.length()-4);
+         
+            ProcessFactory processFactory = new ProcessFactory();
+
+            ReadData readFile = processFactory.getAction("READFILE");
+            ReadData readCard = processFactory.getAction("READCARD");
+
+            // readCard.readData(args[0]);
+            // readFile.readData(args[1]);
+        
+            readCard.readData(strNew + "/resources/CreditCards.csv");
+           
+            readFile.readData(strNew+ "/resources/Dataset.csv");
+            
+            placeOrder(args[0]);
         
         }
     }
 
-    private static void  placeOrder(String path) {
+    private static void  placeOrder(String pathinput) {
 
-        Shopping eu = new Shopping();
-        eu.outputWriter(path);
+        OrderGeneration ordergeneration = new OrderGeneration();
+        ordergeneration.outputWriter(pathinput);
 
     }
 }

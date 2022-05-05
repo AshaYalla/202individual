@@ -1,46 +1,33 @@
 package Utils;
 
-import Repo.DataStorage;
+import Repo.DatasetStore;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
-public class ReadCard implements ReadDataFactory{
+public class ReadCard implements ReadData{
 
-    private DataStorage stockRepository = DataStorage.getInstance();
+    private DatasetStore shopStock = DatasetStore.getInstance();
 
     @Override
     public void readData(String path) {
-
-            String creditFilePath = path;
-            BufferedReader br1 = null;
-
-            try {
-                br1=new BufferedReader(new FileReader(creditFilePath));
+        try {
+            BufferedReader bufferreader1 = new BufferedReader(new FileReader(path));
                 String line1="";
-                int c1=0;
-                while((line1=br1.readLine())!=null){
-                    if(c1==0){
-                        c1=1;
+                while(true){
+                    line1=bufferreader1.readLine();
+                    if(line1==null)
+                        break;
+                    if(line1.equals("CardNumber")){
+                        line1=bufferreader1.readLine();
                     }
                     else{
-                        stockRepository.getcards().add(line1);
+                        shopStock.cardStore().add(line1);
                     }
-
                 }
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-            if (br1 != null) {
-                try {
-                    br1.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
+                bufferreader1.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }
